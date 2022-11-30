@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "71046702906",
+    "project_id": "pressurediary-2a1e6",
+    "storage_bucket": "pressurediary-2a1e6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:71046702906:android:11233603247378c055d203",
+        "android_client_info": {
+          "package_name": "com.example.pressurediary"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "71046702906-63nbt3599e9f7g3jjls8atou0a5t4lv3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCuDBIny280sL_zoE6uyNZ8MmNgJ3q_I8g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "71046702906-63nbt3599e9f7g3jjls8atou0a5t4lv3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
