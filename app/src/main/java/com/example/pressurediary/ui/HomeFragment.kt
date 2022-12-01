@@ -9,20 +9,28 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pressurediary.R
+import com.example.pressurediary.adapter.PressAdapter
 import com.example.pressurediary.databinding.HomeFragmentBinding
+import com.example.pressurediary.model.PressDat
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.ErrorCodes
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
 import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
-class HomeFragment: Fragment() {
+class HomeFragment : Fragment() {
 
     private var _binding: HomeFragmentBinding? = null
     private val binding get() = _binding!!
-    private val viewModel:HomeViewModel by viewModels()
+    private val viewModel: HomeViewModel by viewModels()
+    private lateinit var firestore: FirebaseFirestore
+    private var adapter: PressAdapter? = null
     private val signInLauncher = registerForActivityResult(
         FirebaseAuthUIActivityResultContract()
     ) { result -> this.onSignInResult(result) }
@@ -34,6 +42,30 @@ class HomeFragment: Fragment() {
     ): View {
         _binding = HomeFragmentBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        firestore = Firebase.firestore
+        val pressRef = firestore.collection("pressData")
+        binding.addButton.setOnClickListener {
+            pressRef.add(
+                PressDat("30.11", "120", "80", "75")
+            )
+            pressRef.add(PressDat("30.11", "130", "90", "80"))
+            pressRef.add(PressDat("29.11", "130", "90", "80"))
+
+        }
+        val query =
+            firestore.collection("pressData")
+                .orderBy("date", Query.Direction.DESCENDING)
+        query.let {
+            adapter = PressAdapter(it)
+            binding.recyclerView.adapter = adapter
+        }
+
+        binding.recyclerView.layoutManager = LinearLayoutManager(context)
+
     }
 
     private fun onSignInResult(result: FirebaseAuthUIAuthenticationResult) {
@@ -79,6 +111,7 @@ class HomeFragment: Fragment() {
             startSignIn()
             return
         }
+        adapter?.startListening()
     }
 
     private fun shouldStartSignIn(): Boolean {
